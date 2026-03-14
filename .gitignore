@@ -1,0 +1,8 @@
+.ssh/
+vboxuser_ed25519
+vboxuser_ed25519.pub
+*.pem
+*.key
+
+Thumbs.db
+desktop.ini
