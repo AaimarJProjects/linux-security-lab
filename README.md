@@ -1,119 +1,119 @@
-\## This lab deals with configuring and hardening an ssh server and fail2ban
+## This lab deals with configuring and hardening an ssh server and fail2ban
 
 
 
-\## The machines that were used were:
--Windows 11 (SSH client)
+## The machines that were used were:
+- Windows 11 (SSH client)
 
-\-Ubuntu VM (target server)
-
-
-
-\## These are all the changes I made in the sshd\_config file :
--Changed the default port 22 to a custom port with a large number above 1023 but below 65535 like port 2222 . The reason I did this was to prevent attackers from trying to access sshd using the default port.
--Disabled root login because root login allows a client to login to the ssh server as root giving them root permission which allows them to do basically anything like delete files and see secret info like private keys, passwords, etc. Also if clients log in as root you won't know who did what in the logs as they would all have the same username, root. By disabling root clients must login as regular users and use sudo for admin permissions, this is better as it shows who did what in the logs.
-
-\-Disabled password authentication because it allows clients to log in using a password which can be cracked (figured out) using a brute force attack. Instead I used cryptographic keys to authenticate my client as this is safer because I don't have to enter a password and even if an attacker steals my public key they can't get into the remote machine or server because they still need my private key.
-
-\-Added AllowUsers which is a white list ( a list that says which usernames are allowed in) and prevents clients that ssh in with usernames that are not in AllowUsers from connecting to the ssh server.
+- Ubuntu VM (target server)
 
 
 
+## These are all the changes I made in the sshd\_config file :
+- Changed the default port 22 to a custom port with a large number above 1023 but below 65535 like port 2222 . The reason I did this was to prevent attackers from trying to access sshd using the default port.
+- Disabled root login because root login allows a client to login to the ssh server as root giving them root permission which allows them to do basically anything like delete files and see secret info like private keys, passwords, etc. Also if clients log in as root you won't know who did what in the logs as they would all have the same username, root. By disabling root clients must login as regular users and use sudo for admin permissions, this is better as it shows who did what in the logs.
 
+- Disabled password authentication because it allows clients to log in using a password which can be cracked (figured out) using a brute force attack. Instead I used cryptographic keys to authenticate my client as this is safer because I don't have to enter a password and even if an attacker steals my public key they can't get into the remote machine or server because they still need my private key.
 
-\## What are key pairs and how do they work
-
-\-Key pairs are a public and private key that are generated using an algorithm (a mathematical formula) that match each other. They are both different but are both mathematically connected. The private key stays on your machine and it should not be shared with anyone, but you can share your public key with anyone.
-
-
-
-\## What is challenge-response mechanism
-
-\-Challenge-response mechanism is the puzzle that is created using your public key from the server that can only be solved using your private key on the client and is then verified using your public key.
+- Added AllowUsers which is a white list ( a list that says which usernames are allowed in) and prevents clients that ssh in with usernames that are not in AllowUsers from connecting to the ssh server.
 
 
 
-\## Why does the private key never leave my machine.
-
-\-The private key never leaves my machine because it is used to solve the puzzle that is sent from the server. So if I share my private key with someone else like an attacker now they can solve the puzzle and get into the server with my account which is a big security risk as they have all my permissions.
 
 
+## What are key pairs and how do they work
 
-\## Fail2Ban
-
-\-Fail2ban is a tool that bans ip addresses by monitoring logs and inserting firewall rules to prevent a user from trying to brute force into the server or remote machine from the same ip.
-
-\-Findtime: is the time window in which failures are counted .
--Maxretry: is the maximum amount of failed attempts an ip address has in the Findtime window before it is banned.
--Bantime: is how long a specific ip address will be banned for. It could be a specific time like 10 mins or indefinitely (using -1).
+- Key pairs are a public and private key that are generated using an algorithm (a mathematical formula) that match each other. They are both different but are both mathematically connected. The private key stays on your machine and it should not be shared with anyone, but you can share your public key with anyone.
 
 
 
-\## Firewall Notes
+## What is challenge-response mechanism
 
-\-Ubuntu 22.04+ uses nftables.
+- Challenge-response mechanism is the puzzle that is created using your public key from the server that can only be solved using your private key on the client and is then verified using your public key.
 
-\-Fail2Ban writes bans to nftables on modern Ubuntu.
 
-\-The command used to verify ip address ban in nftables "sudo nft list ruleset".
+
+## Why does the private key never leave my machine.
+
+- The private key never leaves my machine because it is used to solve the puzzle that is sent from the server. So if I share my private key with someone else like an attacker now they can solve the puzzle and get into the server with my account which is a big security risk as they have all my permissions.
+
+
+
+## Fail2Ban
+
+- Fail2ban is a tool that bans ip addresses by monitoring logs and inserting firewall rules to prevent a user from trying to brute force into the server or remote machine from the same ip.
+
+- Findtime: is the time window in which failures are counted .
+- Maxretry: is the maximum amount of failed attempts an ip address has in the Findtime window before it is banned.
+- Bantime: is how long a specific ip address will be banned for. It could be a specific time like 10 mins or indefinitely (using -1).
+
+
+
+## Firewall Notes
+
+- Ubuntu 22.04+ uses nftables.
+
+- Fail2Ban writes bans to nftables on modern Ubuntu.
+
+- The command used to verify ip address ban in nftables "sudo nft list ruleset".
 
  
 
-\## Testing
+## Testing
 
-\-I connected to the ssh server using ssh username@ip and signed in using the password.
+- I connected to the ssh server using ssh username@ip and signed in using the password.
 
-\-Changed the ssh port from 22 to 2222 then I tried connecting to the ssh server with out specifying a port and I got a connection refused message because ssh was no longer listening on port 22.
+- Changed the ssh port from 22 to 2222 then I tried connecting to the ssh server with out specifying a port and I got a connection refused message because ssh was no longer listening on port 22.
 
-\-Disabled root login and then I tried to login as root but the ssh server just kept telling me the password was wrong even though it was correct to trick me into thinking that I could login as root. This is called obscuring failure reasons which is a deliberate security feature that hides the real reason for denial so attackers can't tell whether the username exists or if root login is disabled.
+- Disabled root login and then I tried to login as root but the ssh server just kept telling me the password was wrong even though it was correct to trick me into thinking that I could login as root. This is called obscuring failure reasons which is a deliberate security feature that hides the real reason for denial so attackers can't tell whether the username exists or if root login is disabled.
 
-\-Added an allowed users in sshd\_config, then I tried to login as a different username and I got a permission denied message in the terminal.
+- Added an allowed users in sshd\_config, then I tried to login as a different username and I got a permission denied message in the terminal.
 
-\-Generated public and private key asymmetric  pair using the ed25519 algorithm. Sent the public key to the Ubuntu VM and logged in to the ssh server using my private key after my terminal asked me to enter the passphrase for my private key.
+- Generated public and private key asymmetric  pair using the ed25519 algorithm. Sent the public key to the Ubuntu VM and logged in to the ssh server using my private key after my terminal asked me to enter the passphrase for my private key.
 
-\-I established multiple connection to the ssh server using my private key and as a safety net and also to ensure that my keys were working, left those connections open so that I don't lock my self out of the ssh server and then I disabled password authentication. I tried to force a password login into the ssh server and it told me permission denied (publickey).
+- I established multiple connection to the ssh server using my private key and as a safety net and also to ensure that my keys were working, left those connections open so that I don't lock my self out of the ssh server and then I disabled password authentication. I tried to force a password login into the ssh server and it told me permission denied (publickey).
 
-\-Configured fail2ban jail.local to ban an ip for 10 minutes after 2 failed attempt. I then tried to connect to the ssh server from windows and entered the wrong password 2 times and it kept telling me connection timed out and when I checked the jail for sshd in fail2ban and the nftables file it showed the banned ip.
+- Configured fail2ban jail.local to ban an ip for 10 minutes after 2 failed attempt. I then tried to connect to the ssh server from windows and entered the wrong password 2 times and it kept telling me connection timed out and when I checked the jail for sshd in fail2ban and the nftables file it showed the banned ip.
 
-\-I unbanned the ip "sudo fail2ban-client unban 192.etc.." and checked the fail2ban-client status for sshd and the nftables rules and the banned ip was no longer there. To verify I logged in on the same ip that was banned and I got in successfully.
+- I unbanned the ip "sudo fail2ban-client unban 192.etc.." and checked the fail2ban-client status for sshd and the nftables rules and the banned ip was no longer there. To verify I logged in on the same ip that was banned and I got in successfully.
 
  
 ## What I Learned
 
 By actually doing this lab the concepts below became clearer:
 
-\-I learned the difference between ssh (the client that goes out that tries to connect to the server) and sshd  (the background service that run on the ssh server that listen and accepts incoming connections)
+- I learned the difference between ssh (the client that goes out that tries to connect to the server) and sshd  (the background service that run on the ssh server that listen and accepts incoming connections)
 
-\-I learned by experimenting in the lab that if I change my ssh port number and then restart the ssh server so that it can run and listen for connections on the new port but I don't change the firewall to allow incoming traffic before doing so then I will lock myself out of the ssh server because the firewall will block traffic to the new port for the ssh server because there is no rule to allow traffic to that port. 
+- I learned by experimenting in the lab that if I change my ssh port number and then restart the ssh server so that it can run and listen for connections on the new port but I don't change the firewall to allow incoming traffic before doing so then I will lock myself out of the ssh server because the firewall will block traffic to the new port for the ssh server because there is no rule to allow traffic to that port. 
 
-\-I learned that fail2ban watches the logs and bans the ip by inserting rules into the firewall config file so that when the banned  ip tries to get into the ssh server the firewall denies it.
+- I learned that fail2ban watches the logs and bans the ip by inserting rules into the firewall config file so that when the banned  ip tries to get into the ssh server the firewall denies it.
 
-\-I learned that an allowed list prevents any user that is not on it from being used to ssh into the server.
+- I learned that an allowed list prevents any user that is not on it from being used to ssh into the server.
 
-\-I learned that most passwords can be cracked (figure out) easily using a brute force attack (a script that tries thousands even millions of passwords to figure out a password).
+- I learned that most passwords can be cracked (figure out) easily using a brute force attack (a script that tries thousands even millions of passwords to figure out a password).
 
-\-I learned that cryptographic keys are way safer than passwords because they are mathematically complex and practically impossible to brute force unlike passwords.
+- I learned that cryptographic keys are way safer than passwords because they are mathematically complex and practically impossible to brute force unlike passwords.
 
-\-I learned that the server uses challenge response which is when the server sends an encrypted challenge that is decrypted and signed using my private key and then the server verifies the response using my public key that I sent to it.
-
-
-
-
-
-\## Things that surprised me and didn't go as expected in the lab:
--When changing ports in the sshd\_config file, allowing traffic from the changed port on the firewall and then restarting sshd, the port that ssh listened on didn't change to the new port ,and it was because of socket activation, where systemd was listening on the port  instead of sshd directly. So I had to disable it using "sudo systemctl disable --now ssh.socket".
-
-\-When using my keys to login to the ssh server it would try a couple private keys but it would never get to my private key that match with the public key that I sent to the server. So I had to use a specific command "ssh -o IdentitiesOnly=yes -i\~/.ssh/(theprivatekey) username@ip" to specify the private key so I could then enter my private key passphrase and get into the ssh server. This is a manual fix. I also created a config file for the specific host name and I just use the command "ssh hostname" to ssh into the server.
-
-\-I tried to check iptables to see if the ip was banned but since new ubuntu versions use nftables I had to go there to see the banned ip.
+- I learned that the server uses challenge response which is when the server sends an encrypted challenge that is decrypted and signed using my private key and then the server verifies the response using my public key that I sent to it.
 
 
 
 
 
+## Things that surprised me and didn't go as expected in the lab:
+- When changing ports in the sshd\_config file, allowing traffic from the changed port on the firewall and then restarting sshd, the port that ssh listened on didn't change to the new port ,and it was because of socket activation, where systemd was listening on the port  instead of sshd directly. So I had to disable it using "sudo systemctl disable --now ssh.socket".
+
+- When using my keys to login to the ssh server it would try a couple private keys but it would never get to my private key that match with the public key that I sent to the server. So I had to use a specific command "ssh -o IdentitiesOnly=yes -i\~/.ssh/(theprivatekey) username@ip" to specify the private key so I could then enter my private key passphrase and get into the ssh server. This is a manual fix. I also created a config file for the specific host name and I just use the command "ssh hostname" to ssh into the server.
+
+- I tried to check iptables to see if the ip was banned but since new ubuntu versions use nftables I had to go there to see the banned ip.
 
 
-\## All the commands I used to complete week 1 lab btw all the commands are in double quotes.
+
+
+
+
+
+## All the commands I used to complete week 1 lab btw all the commands are in double quotes.
 
 
 1. First I checked if ssh was installed using "which ssh" because it looks through your system and tells you where the ssh program lives. If it returns a file path ssh is installed and if it returns nothing ssh is not installed.
