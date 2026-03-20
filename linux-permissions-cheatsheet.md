@@ -1,8 +1,8 @@
-\## Linux Permission and User Management Cheat Sheet
+## Linux Permission and User Management Cheat Sheet
 
 
 
-\## chmod
+## chmod
 
 chmod 644 file ->owner read/write permissions, group and others read only
 
@@ -30,7 +30,7 @@ chmod a+x file -> add execute permissions for everyone
 
 
 
-\## chown
+## chown
 
 sudo chown user file or directory -> change owner
 
@@ -46,13 +46,13 @@ The owner can always change permissions as the kernel checks ownership for chmod
 
 
 
-\## chgrp
+## chgrp
 
 sudo chgrp group file or directory -> change group only
 
 
 
-\## ACL commands
+## ACL commands
 
 setfacl -m u:user:rw file -> gives user read/write permissions
 
@@ -69,7 +69,7 @@ su - username or newgrp groupname
 
 
 
-\## sudo
+## sudo
 
 Temporary privilege escalation - it is logged, audited and safer than root login.
 
@@ -93,7 +93,7 @@ Always use visudo as it checks syntax before saving because a broken sudoers fil
 
 
 
-\## User Management
+## User Management
 
 sudo useradd -m -s /bin/bash user -> create a user with a home directory using the flag -m and -s set shell to bash the default is /bin/sh
 
@@ -119,13 +119,13 @@ Key files:
 
 Password hash prefix:
 
-$y$ = yescrypt (modern Ubuntu default, memory hard)
+'$y$' = yescrypt (modern Ubuntu default, memory hard)
 
-$6$ = SHA-512 (older systems, still common in production)
+'$6$' = SHA-512 (older systems, still common in production)
 
 
 
-\## Finding Dangerous Permissions
+## Finding Dangerous Permissions
 
 find / -perm -o+w 2>/dev/null -> world writable files
 
@@ -141,7 +141,7 @@ find / -nouser 2>/dev/null -> orphaned files
 
 
 
-\## Filesystem Attributes
+## Filesystem Attributes
 
 The immutable flag blocks modification even by root
 
