@@ -1,8 +1,8 @@
-\# Firewall Configuration Documentation
+# Firewall Configuration Documentation
 
 
 
-\## Current UFW Rules
+## Current UFW Rules
 
 I ran this command to see my current ufw rules:"sudo ufw status verbose"
 
@@ -67,7 +67,7 @@ This rule allows traffic from my server to reach out to the internet freely with
 
 
 
-\## What each rule prevents:
+## What each rule prevents:
 
 
 
@@ -81,7 +81,7 @@ Without this rule every port on my server would be reachable by default and an a
 
 
 
-\## The Layered Defense Stack
+## The Layered Defense Stack
 
 Every connection attempt to my ssh server passes through multiple checkpoints in order and if any checkpoint fails the connection is blocked and logged. This is called defense in depth.
 
@@ -139,7 +139,7 @@ yes -> IP banned at firewall level
 
 
 
-\## Log Locations
+## Log Locations
 
 
 
@@ -160,7 +160,7 @@ Fail2Ban decisions:
 
 
 
-\## Verification Commands
+## Verification Commands
 
 sudo ufw status verbose -> see all ufw active rules
 
@@ -170,7 +170,7 @@ sudo fail2ban-client status sshd -> checks banned IPs
 
 
 
-\## Testing From Kali
+## Testing From Kali
 
 I tested using ping first with the command "ping -c 4 ipaddress" to confirm that my Kali VM could reach my Ubuntu server at the network level before testing specific ports and it could as 4 packets were sent and 4 were received. If ping failed I would know that the problem was a network connectivity issue rather than a firewall issue. I used the -c flag so that ping only sends a certain amount of icmp echo requests and stops automatically without the need to be stopped manually. 
 
