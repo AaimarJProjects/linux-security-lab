@@ -1,4 +1,6 @@
-## SSH Hardening and Linux Permissions Lab
+
+# SSH Hardening and Linux Permissions Lab
+
 
 
 
@@ -10,11 +12,11 @@ This is my hands on home lab where I practice cybersecurity concepts each week. 
 
 ## Environment
 
-\-Windows 11 (SSH client)
+-Windows 11 (SSH client)
 
-\-Ubuntu VM (target server)
+-Ubuntu VM (target server)
 
-\-Kali Linux VM (attacker machine)
+-Kali Linux VM (attacker machine)
 
 
 
@@ -34,7 +36,17 @@ This week I learned how Linux controls who can access what on a system. I learne
 
 
 
-Full notes -> week2-permissions-notes.md
+Full notes and commands -> week2-permissions-notes.md
+
+
+
+## Week 3 - Firewall Configuration and Network Security
+
+This week I learned how the firewall layers on my Ubuntu server work together. I learned the difference between UFW, iptables, and nftables and how they connect to each other.
+
+
+
+Full notes and commands -> week3-firewall-documentation.md
 
 
 
