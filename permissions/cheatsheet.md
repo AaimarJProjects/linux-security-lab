@@ -3,43 +3,58 @@
 
 
 ## chmod
+``` bash
+# Owner read/write permissions, group and others read only used for config files.
+chmod 644 <filename> 
 
-chmod 644 file ->owner read/write permissions, group and others read only
+# Owner full permissions, group and others read/execute permissions.
+chmod 755 <directory_name>
 
-chmod 755 file ->owner full permissions, group and others read/execute permissions
+# Owner read/write permissions only, used for private keys.
+chmod 600 <filename> 
 
-chmod 600 file -> owner read/write permissions only, used  for private keys
+# Owner full permissions only, used for private directories.
+chmod 700 <directory_name> 
 
-chmod 700 dir -> owner full permissions only, used for private directories
+# Adds sticky bits
+chmod +t <directory_name> 
 
-chmod +t dir -> add sticky bits
+# Adds SetUID
+chmod u+s <filename> 
 
-chmod u+s file -> add SetUID
+# Add SetGID
+chmod g+s <directory_name or filename>
 
-chmod g+s dir -> add SetGID
+# Recursive, verify path before running
+chmod -R 755 <directory_name>
 
-chmod -R 755 dir ->  recursive, verify path before running
+# Adds execute permissions for owner
+chmod u+x <filename> 
 
-chmod u+x file -> adds execute permissions for owner
+# Remove read permissions from others
+chmod o-r <filename or directory_name> 
 
-chmod o-r file -> remove read permissions from others
+# Add execute permissions for everyone
+chmod a+x <filename or directory_name> 
 
-chmod a+x file -> add execute permissions for everyone
-
-
+```
 
 
 
 ## chown
+```bash
+# Changes owner
+sudo chown user <filename or directory_name> 
 
-sudo chown user file or directory -> change owner
+# Change the owner and the group
+sudo chown user:group <filename or directory_name>
 
-sudo chown user:group file or directory ->  change the owner and the group
+# Changes group only
+sudo chown :group <filename or directory_name>
 
-sudo chown :group file or directory -> change group only
-
-sudo chown -R user:group directory -> recursive
-
+# Recursive
+sudo chown -R user:group <directory_name> 
+```
 
 
 The owner can always change permissions as the kernel checks ownership for chmod and not the permission bits themselves
@@ -47,25 +62,30 @@ The owner can always change permissions as the kernel checks ownership for chmod
 
 
 ## chgrp
-
-sudo chgrp group file or directory -> change group only
-
+```bash
+# Changes group only
+sudo chgrp group <filename or directory_name>
+```
 
 
 ## ACL commands
+``` bash
+# ACL entry that gives user read/write permissions 
+setfacl -m u:user:rw <directory_name>
 
-setfacl -m u:user:rw file -> gives user read/write permissions
+# Remove user entry
+setfacl -x u:user <directory_name> 
 
-setfacl -x u:user file -> remove user entry
+# Remove all ACLs
+setfacl -b <directory_name> 
 
-setfacl -b file -> remove all ACLs
-
-getfacl file -> view all ACL entries
-
+# View all ACL entries
+getfacl <filename>
+```
 
 
 Session refresh is required after group changes:
-su - username or newgrp groupname
+```su - <username or newgrp groupname>```
 
 
 
@@ -77,9 +97,9 @@ Temporary privilege escalation - it is logged, audited and safer than root login
 
 Two methods to grant sudo access on Ubuntu:
 
-1)sudo group (standard): sudo usermod -aG sudo username
+1) sudo group (standard): ```sudo usermod -aG sudo <username>```
 
-2)sudo visudo use this for fine grained control: sudo visudo and add username ALL=(ALL:ALL)ALL
+2) sudo visudo use this for fine grained control: sudo visudo and add username ALL=(ALL:ALL)ALL
 
 
 
@@ -94,50 +114,58 @@ Always use visudo as it checks syntax before saving because a broken sudoers fil
 
 
 ## User Management
+```bash
+#  Create a user with a home directory using the flag -m and -s set shell to bash the default is /bin/sh
+sudo useradd -m -s /bin/bash <username>
 
-sudo useradd -m -s /bin/bash user -> create a user with a home directory using the flag -m and -s set shell to bash the default is /bin/sh
+# Set password
+sudo passwd <username> 
 
-sudo passwd user -> set password
+# Add to group, always use -aG
+sudo usermod -aG group <username> 
 
-sudo usermod -aG group user -> add to group, always use -aG
-
-sudo userdel -r user -> delete user and home directory
-
-
-
-Key files:
-
-/etc/passwd -> account info, world readable, no hashes
-
-/etc/shadow -> password hashes, root readable only
-
-/etc/group -> group definitions and membership
-
-/etc/skel -> template copied into every new directory
+# Deletes user and home directory
+sudo userdel -r <username> 
+```
 
 
+### Key files:
 
-Password hash prefix:
+- /etc/passwd - account info, world readable, no hashes.
 
-'$y$' = yescrypt (modern Ubuntu default, memory hard)
+- /etc/shadow - password hashes, root and shadow group readable only.
 
-'$6$' = SHA-512 (older systems, still common in production)
+- /etc/group - group definitions and membership.
+
+- /etc/skel - template copied into every new directory.
+
+
+
+### Password hash prefix:
+
+```$y$``` = yescrypt (modern Ubuntu default, memory hard)
+
+```$6$``` = SHA-512 (older systems, still common in production)
 
 
 
 ## Finding Dangerous Permissions
+``` bash
+# World writable files
+find / -perm -o+w 2>/dev/null 
 
-find / -perm -o+w 2>/dev/null -> world writable files
+# SetUID binaries
+find /usr/bin -perm -4000 
 
-find /usr/bin -perm -4000 -> SetUID binaries
+# SetGID binaries
+find /usr/bin -perm -2000 
 
-find /usr/bin -perm -2000 -> SetGID binaries
+# Orphaned files
+find / -nouser 2>/dev/null 
+```
 
-find / -nouser 2>/dev/null -> orphaned files
 
-
-
-2>/dev/null suppresses permission denied noise
+```2>/dev/null``` suppresses permission denied noise
 
 
 
@@ -146,13 +174,16 @@ find / -nouser 2>/dev/null -> orphaned files
 The immutable flag blocks modification even by root
 
 
+``` bash
+# Make immutable
+sudo chattr +i <filename>  
 
-sudo chattr +i file  -> make immutable
+# Remove immutable
+sudo chattr -i <filename> 
 
-sudo chattr -i file -> remove immutable
-
-lsattr file -> check attributes
-
+# Check attributes
+lsattr <filename> 
+```
 
 
 Used to protect critical config files on hardened servers.
