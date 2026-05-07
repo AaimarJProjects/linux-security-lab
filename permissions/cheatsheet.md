@@ -71,16 +71,16 @@ sudo chgrp group <filename or directory_name>
 ## ACL commands
 ``` bash
 # ACL entry that gives user read/write permissions 
-setfacl -m u:user:rw <directory_name>
+setfacl -m u:user:rw <filename or directory_name>
 
 # Remove user entry
-setfacl -x u:user <directory_name> 
+setfacl -x u:user <filename or directory_name>
 
 # Remove all ACLs
-setfacl -b <directory_name> 
+setfacl -b <filename or directory_name>
 
 # View all ACL entries
-getfacl <filename>
+getfacl <filename or directory_name>
 ```
 
 
