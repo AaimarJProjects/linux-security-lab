@@ -33,7 +33,7 @@ These permissions are added up and commonly expressed like 644. The first number
 
 
 ## ACLs
-ACLs stand for access control lists and it is used when you need fine grained or specific permissions to be applied to individual users or groups since standard permissions can only be applied to three levels which are the owner, the group and others. With ACLs, I can give each user their own specific permissions on top of the standard permissions, and there is a mask. The mask changes to what ever is the highest configured permissions that you apply to a user or group in the ACL. If you set a mask to cap the effective permissions of all the ACL entries and you add a new ACL entry it silently recalculates the mask, and can undo a manual restriction. A file or directory that has an ACL applied ends with + in the permission string.
+ACLs stand for access control lists and it is used when you need fine grained or specific permissions to be applied to individual users or groups since standard permissions can only be applied to three levels which are the owner, the group and others. With ACLs, I can give each user their own specific permissions on top of the standard permissions, and there is a mask. The mask caps effective permissions of all named users, named groups and the owning group. It never touches the file owner and other entry those are always applied directly no matter what the mask is set to. The mask also changes to what ever is the highest configured permissions that you apply to a user or group in the ACL. If you set a mask to cap the effective permissions of all the ACL entries and you add a new ACL entry it silently recalculates the mask, and can undo a manual restriction. A file or directory that has an ACL applied ends with + in the permission string.
 
 ### Verification
 ``` bash
@@ -46,10 +46,10 @@ setfacl -m u:<username>:rw- testmask3
 # Views the ACL for the file. Saw the line with user:<username>:rw-.
 getfacl testmask3
 
-# Change the mask to cap Permissions to read for all ACL entries. 
+# Change the mask to cap Permissions to read for all named users, groups and the owning group. 
 setfacl -m m::r-- testmask3
 
-# Viewed the ACL for the file and saw the permissions capped at read for all the added ACL entries #effective: r--.
+# Viewed the ACL for the file and saw the permissions capped at read for all named users, groups and the owning group #effective: r--.
 getfacl testmask3
 
 # Added another user with rw- permissions
