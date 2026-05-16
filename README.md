@@ -1,38 +1,15 @@
 
-\# Linux Security Lab 
+# Linux Security Lab 
 
-This is a hands on lab where I spend each week learning and practicing real cybersecurity and Linux system administration skills. I document everything I do, why I did it, what I learned so that I can look back at it, and be able to explain it to anyone. This is built toward my goal of continuous learning and improving daily. As the best way to learn is by going thru the theory and actually applying it.
-
-
-
-# SSH Hardening and Linux Permissions Lab
-> Documentation is being updated. 
-> Month 2 work is complete and available here: [docker-api-deployment](https://github.com/AaimarJProjects/docker-api-deployment)
+This is my home lab where I hardened my Ubuntu server, ssh, permissions, and firewall to protect my server from being compromised. I installed tools like tcpdump to watch network traffic from the defenders perspective. I attacked my own server from kali, noticed kali and windows produced different responses after being banned, investigated what the problem might be, tested it, and traced the real cause to VirtualBox's separate virtual network path. 
 
 
-\## What this lab covers 
-
-
-Each folder contains my notes, explanations, and evidence for a specific topic. I try to write everything in my own words because I want to actually understand what I am doing and not just copy it, but bear with me as I am relatively new to doing all of this. 
-=======
-## What this is
-
-This is my hands on home lab where I practice cybersecurity concepts each week. I document everything I do, why I did it, and what I learned so that I can refer back to it and explain it to anyone. 
-
-
-
-
-\## SSH Server Hardening and Fail2Ban
-
-login, set up key authentication,  disabled password authentication, and configured fail2ban to automatically ban IPs that fail to login or authenticate too many times. 
-
-
-
+Each folder contains my notes, explanations, and evidence for each week.
 
 
 ## Week 1 - SSH Server Hardening and Fail2Ban
 
-This week I set up and hardened an SSH server on my Ubuntu VM. I changed the default port, disabled root login, set up key authentication,  disabled password authentication, and configured fail2ban to automatically ban IPs that fail to login or authenticate too many times.
+Week 1 I set up and hardened my SSH server on my Ubuntu VM. I changed the default port, disabled root login, set up key authentication,  disabled password authentication, and configured fail2ban to automatically ban IPs that fail to login or authenticate too many times.
 
 
 
@@ -40,33 +17,36 @@ This week I set up and hardened an SSH server on my Ubuntu VM. I changed the def
 
 ## Week 2 - Linux User Management and Permissions
 
-This week I learned about Linux user management, file permissions, ownership, ACLs, and the authentication files that underlie everything. Includes intentional permission breaking and recovery exercises.
-
-
+Week 2 I learned about Linux user management, file permissions, ownership, ACLs, and the file system attributes files that underlie everything. Includes intentional permission breaking and recovery.
 
 
 
 ## Week 3 - Firewall Configuration and Network Security
 
-This week I learned about UFW configuration, iptables and nftables architecture, tcpdump packet capture analysis, and attack testing from a Kali Linux VM to verify defenses from the outside.
+This week I learned about UFW configuration, iptables and nftables architecture, tcpdump packet capture analysis, and attack testing from my Kali Linux VM to verify defenses from the outside and watched attack patterns from a defenders perspective.
 
 
 
 
 
-\## Lab Environment
+## Lab Environment
 
-\-Windows 11 (SSH client)
+- Windows 11 (SSH client) - Windows host where I run these two VMs below using Oracle Virtual Box, ssh into my server, and update my GitHub repositories.
 
-\-Ubuntu VM (target server)
+- Ubuntu VM (target server) -  Ubuntu  Server VM that I hardened and protected
 
-\-Kali Linux VM (attacker machine)
+- Kali Linux VM (attacker machine) -  Kali VM used to simulate being an attacker, and to see the holes in my defense from an attackers point of view, and make my server more secure. 
 
-\-Oracle Virtual Box (virtualization)
+- Oracle Virtual Box (virtualization) 
 
 
 
-\## What I Learned and what surprised me 
+## What I Learned and what surprised me 
+
+- ARP traffic is constant on the wire because ip address are constantly changing as device leave and join the network. The ARP cache uses a TTL (time to live), and entries expire deliberately so the mapping stays accurate and device can communicate with each other.
+
+- A closed nmap result had two different causes, one was because no service was listening so kernel sent TCP reset, and the other was because I had a firewall reject rule so the kernel also sent a TCP reset. These two cases where indistinguishable from the defenders perspective on the system as they both produce the same TCP RST.  
+
 
 
 
