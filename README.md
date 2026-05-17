@@ -1,5 +1,5 @@
 
-# Month 1 - Linux Security Lab 
+# Month 1 - Linux Security 
 
 This is my home lab where I hardened my Ubuntu server, ssh, permissions, and firewall to protect my server from being compromised. I installed tools like tcpdump to watch network traffic from the defenders perspective. I attacked my own server from kali, noticed kali and windows produced different responses after being banned, investigated what the problem might be, tested it, and traced the real cause to VirtualBox's separate virtual network path. 
 
