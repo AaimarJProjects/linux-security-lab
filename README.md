@@ -1,29 +1,17 @@
 
-# Linux Security Lab 
+# Month 1 - Linux Security Lab 
 
 This is my home lab where I hardened my Ubuntu server, ssh, permissions, and firewall to protect my server from being compromised. I installed tools like tcpdump to watch network traffic from the defenders perspective. I attacked my own server from kali, noticed kali and windows produced different responses after being banned, investigated what the problem might be, tested it, and traced the real cause to VirtualBox's separate virtual network path. 
 
 
 Each folder contains my notes, explanations, and evidence for each week.
 
-
-## Week 1 - SSH Server Hardening and Fail2Ban
-
-Week 1 I set up and hardened my SSH server on my Ubuntu VM. I changed the default port, disabled root login, set up key authentication,  disabled password authentication, and configured fail2ban to automatically ban IPs that fail to login or authenticate too many times.
-
-
-
-
-
-## Week 2 - Linux User Management and Permissions
-
-Week 2 I learned about Linux user management, file permissions, ownership, ACLs, and the file system attributes files that underlie everything. Includes intentional permission breaking and recovery.
-
-
-
-## Week 3 - Firewall Configuration and Network Security
-
-This week I learned about UFW configuration, iptables and nftables architecture, tcpdump packet capture analysis, and attack testing from my Kali Linux VM to verify defenses from the outside and watched attack patterns from a defenders perspective.
+## What Each Week Covers
+| Week | Topic | What Was Covered |
+| --- | --- | --- |
+| [Week 1](./ssh-hardening/) | SSH Server Hardening and Fail2Ban | Week 1 I set up and hardened my SSH server on my Ubuntu VM. I changed the default port, disabled root login, set up key authentication,  disabled password authentication, and configured fail2ban to automatically ban IPs that fail to login or authenticate too many times.|
+| [Week 2](./permissions/) | Linux User Management and Permissions | Week 2 I learned about Linux user management, file permissions, ownership, ACLs, and the file system attributes files that underlie everything. Includes intentional permission breaking and recovery. |
+| [Week 3](./firewall/) | Firewall Configuration and Network Security | This week I learned about UFW configuration, iptables and nftables architecture, tcpdump packet capture analysis, and attack testing from my Kali Linux VM to verify defenses from the outside and watched attack patterns from a defenders perspective. |
 
 
 
